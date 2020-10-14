@@ -201,17 +201,38 @@ passport.use(new BasicStrategy(
         passport.authenticate('basic', { session: false }),
         (req, res) => {
             
-        const newItem = {
-            id: uuidv4(),
-            userId: req.user.id,
-            title: req.body.title,
-            description: req.body.description,
-            category: req.body.category,
-            location: req.body.location,
-            price: req.body.price,
-            date: req.body.date,
-            deliveryType: req.body.deliveryType
-        }
+            if('title' in req.body == false ) {
+                res.status(400);
+                res.json({status: "Missing title from body"})
+                return;
+                }
+            if('description' in req.body == false ) {
+                res.status(400);
+                res.json({status: "Missing description from body"})
+                return;
+                }
+            if('category' in req.body == false ) {
+                res.status(400);
+                res.json({status: "Missing category from body"})
+                return;
+                }
+            if('price' in req.body == false ) {
+                res.status(400);
+                res.json({status: "Missing price from body"})
+                return;
+                }
+
+            const newItem = {
+                id: uuidv4(),
+                userId: req.user.id,
+                title: req.body.title,
+                description: req.body.description,
+                category: req.body.category,
+                location: req.body.location,
+                price: req.body.price,
+                date: req.body.date,
+                deliveryType: req.body.deliveryType
+            }
 
         items.push(newItem);
 
