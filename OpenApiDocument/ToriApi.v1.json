@@ -1,0 +1,688 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ToriApi",
+    "version": "1.0",
+    "description": "ToriApi",
+    "contact": {
+      "name": "t8vavi02",
+      "url": "https://github.com/Vaara/bci-ge/",
+      "email": "t8vavi02@students.oamk.fi"
+    },
+    "license": {
+      "name": "free",
+      "url": "-"
+    },
+    "termsOfService": "-"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/items": {
+      "get": {
+        "summary": "Get information on items",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                      "Title": "Canon Eos 500D",
+                      "Description": "Hyvin palvellut kamera. Shutter count 99 000",
+                      "Category": "Valokuvaus",
+                      "Location": {
+                        "street": "torikatu",
+                        "county": "pohjois-pohjanmaa",
+                        "postalCode": "90150",
+                        "city": "Oulu"
+                      },
+                      "Images": [
+                        null
+                      ],
+                      "Asking price": 50,
+                      "Date of posting": "10.10.2020",
+                      "Delivery type:": "Nouto",
+                      "userId": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-item",
+        "description": "returns all items."
+      },
+      "parameters": [],
+      "post": {
+        "summary": "Create a new sale item",
+        "operationId": "post-items",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "HttpBasic": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Item"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "id": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                    "Title": "Canon Eos 500D",
+                    "Description": "Hyvin palvellut kamera. Shutter count 99 000",
+                    "Category": "Valokuvaus",
+                    "Location": {
+                      "street": "torikatu",
+                      "county": "pohjois-pohjanmaa",
+                      "postalCode": "90150",
+                      "city": "Oulu"
+                    },
+                    "Images": [
+                      null
+                    ],
+                    "Asking price": 50,
+                    "Date of posting": "10.10.2020",
+                    "Delivery type:": "Nouto",
+                    "userId": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask"
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "description": "Requires Auth, \n\nfor testing= Username:Testi, Password:Testi. \nOr create a new user trough /register."
+      }
+    },
+    "/register": {
+      "post": {
+        "summary": "Register a new user",
+        "operationId": "post-register",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "userId": 233834
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request has missing or malformed information"
+          },
+          "409": {
+            "description": "Username taken."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "id": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                    "name": "Urho Kekkonen",
+                    "phone": "040 1234567",
+                    "email": "Kurho@gmail.com",
+                    "username": "Keppo",
+                    "password": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                    "birthdate": "2020-16-09",
+                    "street": "urhonkuja 2",
+                    "county": "Lappi",
+                    "postalcode": "95500",
+                    "city": "Tornio"
+                  }
+                }
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "description": "Create new user"
+        },
+        "description": "register a new user"
+      },
+      "parameters": []
+    },
+    "/items/{itemId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "number"
+          },
+          "name": "itemId",
+          "in": "path",
+          "required": true,
+          "description": ""
+        }
+      ],
+      "put": {
+        "summary": "Modify item on sale",
+        "operationId": "put-items-itemId",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Item"
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "id": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                    "Title": "Canon Eos 500D",
+                    "Description": "Hyvin palvellut kamera. Shutter count 99 000",
+                    "Category": "Valokuvaus",
+                    "Location": {
+                      "street": "torikatu",
+                      "county": "pohjois-pohjanmaa",
+                      "postalCode": "90150",
+                      "city": "Oulu"
+                    },
+                    "Images": [
+                      null
+                    ],
+                    "Asking price": 50,
+                    "Date of posting": "10.10.2020",
+                    "Delivery type:": "Nouto",
+                    "userId": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HttpBasic": []
+          }
+        ],
+        "description": "Requires Auth, \n\nfor testing= Username:Testi, Password:Testi. \nOr create a new user trough /register.\n\nYou can either update the entire object, or any individual field.\nYou can only modify items owned/ created by your authenticated user"
+      },
+      "get": {
+        "summary": "Get information on specific sale item",
+        "operationId": "get-items-itemId",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                      "Title": "Canon Eos 500D",
+                      "Description": "Hyvin palvellut kamera. Shutter count 99 000",
+                      "Category": "Valokuvaus",
+                      "Location": {
+                        "street": "torikatu",
+                        "county": "pohjois-pohjanmaa",
+                        "postalCode": "90150",
+                        "city": "Oulu"
+                      },
+                      "Images": [
+                        null
+                      ],
+                      "Asking price": 50,
+                      "Date of posting": "10.10.2020",
+                      "Delivery type:": "Nouto",
+                      "userId": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "description": "get item by id"
+      },
+      "delete": {
+        "summary": "Delete specific item on sale",
+        "operationId": "delete-items-itemId",
+        "responses": {
+          "200": {
+            "description": "Deleted"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HttpBasic": []
+          }
+        ],
+        "description": "Requires Auth, \n\nfor testing= Username:Testi, Password:Testi. \nOr create a new user trough /register.\n\nYou can only delete items owned/ created by your authenticated user"
+      }
+    },
+    "/users/{userId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": ""
+        }
+      ],
+      "get": {
+        "summary": "Get specific user information",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                      "name": "Urho Kekkonen",
+                      "phone": "040 1234567",
+                      "email": "Kurho@gmail.com",
+                      "username": "Keppo",
+                      "password": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                      "birthdate": "2020-16-09",
+                      "street": "urhonkuja 2",
+                      "county": "Lappi",
+                      "postalcode": "95500",
+                      "city": "Tornio"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "operationId": "get-users-userId",
+        "description": "get user by id\nCan be used to get the sellers info,\nsince all the sales items are equipped with an userId."
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Search items by category, date or city",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "0",
+                      "userId": "0",
+                      "Title": "string",
+                      "Description": "string",
+                      "Category": "string",
+                      "Location": {
+                        "street": "string",
+                        "country": "string",
+                        "postalCode": "string",
+                        "city": "string"
+                      },
+                      "Images": [
+                        null
+                      ],
+                      "Asking price": 0,
+                      "Date of posting": "string",
+                      "Delivery type:": "string",
+                      "Seller's name and contact information": {
+                        "id": 0,
+                        "name": "string",
+                        "phone": "string",
+                        "email": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "operationId": "get-items-search",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "?category=",
+            "description": "for example: /search?category=Valokuvaus"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "?date=",
+            "description": "for example: /search?date=10.10.2020"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "?location.city=",
+            "description": "for example: /search?location.city=Tornio"
+          }
+        ],
+        "description": "search items by category, date or city"
+      },
+      "parameters": []
+    },
+    "/users": {
+      "get": {
+        "summary": "Get all registered users",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                      "name": "Urho Kekkonen",
+                      "phone": "040 1234567",
+                      "email": "Kurho@gmail.com",
+                      "username": "Keppo",
+                      "password": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+                      "birthdate": "2020-16-09",
+                      "street": "urhonkuja 2",
+                      "county": "Lappi",
+                      "postalcode": "95500",
+                      "city": "Tornio"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-users",
+        "description": "Returns all registered users. Exists for testing purposes."
+      },
+      "parameters": []
+    }
+  },
+  "components": {
+    "schemas": {
+      "Item": {
+        "title": "Items",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "id": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+            "Title": "Canon Eos 500D",
+            "Description": "Hyvin palvellut kamera. Shutter count 99 000",
+            "Category": "Valokuvaus",
+            "Location": {
+              "street": "torikatu",
+              "county": "pohjois-pohjanmaa",
+              "postalCode": "90150",
+              "city": "Oulu"
+            },
+            "Images": [
+              null
+            ],
+            "Asking price": 50,
+            "Date of posting": "10.10.2020",
+            "Delivery type:": "Nouto",
+            "userId": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask"
+          }
+        },
+        "description": "",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "Title": {
+            "type": "string"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "Category": {
+            "type": "string"
+          },
+          "Location": {
+            "type": "object",
+            "properties": {
+              "street": {
+                "type": "string"
+              },
+              "county": {
+                "type": "string"
+              },
+              "postalCode": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              }
+            }
+          },
+          "Images": {
+            "type": "array",
+            "items": {}
+          },
+          "Asking price": {
+            "type": "number"
+          },
+          "Date of posting": {
+            "type": "string"
+          },
+          "Delivery type": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "Title",
+          "Description",
+          "Category",
+          "Asking price",
+          "userId"
+        ]
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "x-examples": {
+          "example-1": {
+            "id": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+            "name": "Urho Kekkonen",
+            "phone": "040 1234567",
+            "email": "Kurho@gmail.com",
+            "username": "Keppo",
+            "password": "$2a$06$VIat4eRzDZgtcKGaFkiH0etask",
+            "birthdate": "2020-16-09",
+            "street": "urhonkuja 2",
+            "county": "Lappi",
+            "postalcode": "95500",
+            "city": "Tornio"
+          }
+        },
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "birthdate": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "county": {
+            "type": "string"
+          },
+          "postalcode": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "username",
+          "password"
+        ]
+      },
+      "ErrorResponse": {
+        "title": "ErrorResponse",
+        "type": "object",
+        "properties": {
+          "errorDescription": {
+            "type": "string"
+          }
+        },
+        "x-examples": {
+          "example-1": {
+            "errorDescription": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "HttpBasic": {
+        "name": "API Key",
+        "type": "apiKey",
+        "in": "query",
+        "description": ""
+      }
+    }
+  },
+  "security": [
+    {
+      "API Key - 1": []
+    }
+  ]
+}
